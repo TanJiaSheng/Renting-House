@@ -1,8 +1,13 @@
-#项目介绍
+# 项目介绍
 
 基于 react+react-router+rudux 技术栈开发的一个租房项目
 
-##导入路由模块
+## 项目功能
+
+- 1 登录
+- 2 首页
+
+## 导入路由模块
 
 - 安装
 
@@ -10,7 +15,7 @@
 npm i react-router-dom
 ```
 
-##引入semantic-ui-react组件库
+## 引入semantic-ui-react组件库
 
 - 安装
 
@@ -71,3 +76,82 @@ class Form extends React.Component {
 export default Home
 
 ```
+
+## 登录功能
+
+### 文本受控组件
+
+ ```jsx 
+  //文本框添加 value={ this.state.pwd } onChange={ this.handleChange } 属性
+  // 添加受控组件文本改变方法
+  handleChange = e => {
+    let {name, value} = e.target
+    this.setState({
+      [name]: value
+    })
+  }
+ ```
+
+### 引入axios
+
+- 安装
+
+```npm
+npm i axios
+```
+
+- 使用
+
+1. 在index.js文件中引入，不用再每个文件中多次引入
+
+```js
+import axios from 'axios'
+```
+2. 把axios对象绑定到React组件的原型上，将来所有的react组件都能访问到axios对象
+
+```js
+React.Component.prototype.axios = axios
+```
+
+3. 给axios对象配置默认全局路径
+
+```js
+axios.defaults.baseURL = 'http://47.96.21.88:8086/'
+```
+
+4. 给axios配置响应拦截器 直接把data中的数据返回
+ ```js
+ axios.interceptors.response.use(
+   function(res) {
+
+   },
+   function(err) {
+
+   }
+ )
+ ```
+
+ ### 登录
+
+ - 设置token
+
+ - 编程式导航跳转到首页
+
+ 1. 引入withRouter实现编程式导航
+
+ ```js
+import { withRouter } from 'react-router-dom'
+ ```
+
+ 2. 通过history对象跳转页面
+
+ ```js
+ let { history } = this.props
+
+ // 跳转到主页
+ history.push('/home')
+ ```
+
+
+
+
