@@ -152,6 +152,12 @@ import { withRouter } from 'react-router-dom'
  history.push('/home')
  ```
 
+ ## 首页
+
+ ### 底部导航
+
+ 配置路由，跳转到对应的页面
+
 
 
 
