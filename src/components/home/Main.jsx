@@ -1,7 +1,7 @@
 import React from 'react'
 import "react-image-gallery/styles/css/image-gallery.css"
 import './Main.css'
-import { Input, Grid, Icon, Item, Button } from 'semantic-ui-react'
+import { Input, Grid, Icon, Item, Button, Dimmer, Loader } from 'semantic-ui-react'
 // import { Link } from 'react-router-dom'
 // 导入轮播图组件
 import ImageGallery from 'react-image-gallery'
@@ -14,7 +14,8 @@ class Main extends React.Component {
       menuList: [],
       infoList: [],
       faqList: [],
-      houseList: []
+      houseList: [],
+      loading: true
     }
   }
   render() {
@@ -24,6 +25,9 @@ class Main extends React.Component {
           <Input icon={{ name: 'search', circular: true, link: true }} placeholder='搜房源...' fluid />
         </div>
         <div className="content">
+          <Dimmer inverted active={this.state.loading} page>
+            <Loader>Loading</Loader>
+          </Dimmer>
           {/* 轮播图 */}
           <ImageGallery
             items={this.state.imgList}
@@ -47,14 +51,32 @@ class Main extends React.Component {
   }
 
   // 页面加载完成，发送ajax请求，获取页面数据
-  componentDidMount () {
-    this.getSwipe()
-    this.getMenuList()
-    this.getInfoList()
-    this.getFaqList()
-    this.getHouseList()
+  async componentDidMount () {
+    await Promise.all([
+      this.doRequest('homes/swipe', 'imgList'),
+      this.doRequest('homes/menu', 'menuList'),
+      this.doRequest('homes/info', 'infoList'),
+      this.doRequest('homes/faq', 'faqList'),
+      this.doRequest('homes/house', 'houseList')
+    ])
+    this.setState({
+      loading: false
+    })
   }
-  // 获取轮播图数据
+  
+  // 优化首页ajax请求
+  doRequest = (url, dataName) => {
+    return this.axios.post(url).then(res => {
+      let { data, meta } = res
+      if(meta.status === 200) {
+        this.setState({
+          [dataName]: data.list
+        })
+      }
+    })
+  }
+
+/*   // 获取轮播图数据
   getSwipe = async () => {
     // 发送ajax请求
     let res = await this.axios.post('homes/swipe')
@@ -107,7 +129,7 @@ class Main extends React.Component {
       this.state.houseList = data.list
       this.setState(this.state)
     }
-  }
+  } */
 }
 
 // 定义菜单组件，渲染菜单数据

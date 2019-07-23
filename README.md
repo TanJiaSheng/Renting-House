@@ -159,5 +159,66 @@ import { withRouter } from 'react-router-dom'
  配置路由，跳转到对应的页面
 
 
+### 首页问题
+
+- 组件之间传参
+
+问题：用data={ this.state.xxx }传过来的参数用props接收显示为空？
+
+解决方法：
+
+1. 在组件函数内部解构
+```js
+let { data } = props
+```
+
+2. 函数参数解构
+
+```js
+function Main({ data }) {}
+```
+
+- ajax请求优化
+
+首页的不同组件数据获取的方式除了请求地址和存放数据的数组，其他一样。同样类型的函数太多，如何优化？
+
+1. 定义一个通用的请求方法
+
+```js
+  // 优化首页ajax请求
+  doRequest = (url, dataName) => {
+    return this.axios.post(url).then(res => {
+      let { data, meta } = res
+      if(meta.status === 200) {
+        this.setState({
+          [dataName]: data.list
+        })
+      }
+    })
+  }
+```
+
+2. 使用Promise.all对象
+
+```js
+async componentDidMount () {
+  await Promise.all([
+    this.doRequest('homes/swipe', 'imgList'),
+    this.doRequest('homes/menu', 'menuList'),
+    this.doRequest('homes/info', 'infoList'),
+    this.doRequest('homes/faq', 'faqList'),
+    this.doRequest('homes/house', 'houseList')
+  ])
+  this.setState({
+    loading: false
+  })
+}
+```
+
+
+
+
+
+
 
 
