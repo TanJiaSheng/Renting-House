@@ -6,6 +6,7 @@
 
 - 1 登录
 - 2 首页
+- 3 资讯页
 
 ## 导入路由模块
 
@@ -214,6 +215,53 @@ async componentDidMount () {
   })
 }
 ```
+
+## 资讯页
+
+### 上拉刷新，下拉加载
+
++ 安装 react-touch-loader插件
+
+```js
+npm install react-touch-loader
+```
+注意：react-touch-loader插件的样式是用less写的，react项目初始化不支持less，支持css和sass。
+需要修改webpack的配置文件以支持less。
+
+### 资讯页问题
+
+- 问题1：react中，不同的页面使用同一个组件, 如果组件不变，改变只是内部的某一个参数，该组件不会刷新
+
+  解决：在组件外面套给对应的页面添加一个皮套，页面就跟调用不同的组件一样。外面变了，内在使用的是统一套规则。
+
+```js
+// 组件
+function Loader() {}
+
+// 外套
+function M1() {
+  return <Loader />
+}
+
+function M2() {
+  return <Loader />
+}
+
+function M3() {
+  return <Loader />
+}
+```
+- 问题2：react中setState是异步的，通过setState修改react内部数据，不是立即刷新
+
+  解决方式：
+
+  1. async await 
+
+  2. 定时器setTimeout
+  
+  3. 回调函数
+
+
 
 
 

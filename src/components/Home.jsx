@@ -2,10 +2,11 @@ import React from 'react'
 import './Home.css'
 import { Grid, Icon } from 'semantic-ui-react'
 import { Switch, Route, NavLink } from 'react-router-dom'
-import Main from './home/Main'
-import Info from './home/Info'
+import Main from './home/main/Main'
+import Info from './home/info/Info'
 import Chat from './home/Chat'
 import My from './home/My'
+
 
 class Home extends React.Component {
   render() {
